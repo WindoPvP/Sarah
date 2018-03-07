@@ -84,13 +84,14 @@ if(!message.guild.member(message.author).hasPermission("MANAGE_GUILD")) return m
   }
 
 
-  if (message.content.startsWith(prefix+"clearwarns")||message.content===prefix+"clearwarns") {
+  if (message.content.startsWith(prefix+"clearwarns") || message.content === prefix + "clearwarns") {
 if (message.channel.type === "dm") return;
+
 if(!message.guild.member(message.author).hasPermission("MANAGE_GUILD")) return message.reply("**:x: Vous n'avez pas la permission `manage-guild` dans ce serveur**").catch(console.error);
+
    const mentioned = message.mentions.users.first();
     const args = message.content.split(' ').slice(1);
     const arg2 = Number(args[1]);
-    if (message.member.hasPermission('MANAGE_GUILD')){
       if (message.mentions.users.size != 0) {
         if (args[0] === "<@!"+mentioned.id+">"||args[0] === "<@"+mentioned.id+">"){
           if (!isNaN(arg2)) {
@@ -104,7 +105,6 @@ if(!message.guild.member(message.author).hasPermission("MANAGE_GUILD")) return m
             delete warns[message.guild.id][mentioned.id][arg2];
             var i = 1;
             Object.keys(warns[message.guild.id][mentioned.id]).forEach(function(key){
-              var val=warns[message.guild.id][mentioned.id][key];
               delete warns[message.guild.id][mentioned.id][key];
               key = i;
               warns[message.guild.id][mentioned.id][key]=val;
@@ -114,12 +114,12 @@ if(!message.guild.member(message.author).hasPermission("MANAGE_GUILD")) return m
             if (Object.keys(warns[message.guild.id][mentioned.id]).length === 0) {
               delete warns[message.guild.id][mentioned.id];
             }
-            message.channel.send(`Le warn de **${mentioned.tag}**\': **${args[1]}** a été enlevé avec succès!`);
+            message.channel.send(`Le warn de **${mentioned.tag}**: **n°${args[1]}** a été enlevé avec succès!`);
             return;
           } if (args[1] === "tout") {
             delete warns[message.guild.id][mentioned.id];
-            fs.writeFile("./warns.json", JSON.stringify(warns), (err) => {if (err) console.error(err);});
-            message.channel.send(`Les warns de **${mentioned.tag}** a été enlevé avec succès!`);
+            fs.writeFile("./data/warns.json", JSON.stringify(warns), (err) => {if (err) console.error(err);});
+            message.channel.send(`Les warns de **${mentioned.tag}** ont tous été enlevés avec succès!`);
             return;
           } else {
             message.channel.send("Erreur mauvais usage: "+prefix+"clearwarns <utilisateur> <nombre|tout>");
@@ -130,8 +130,6 @@ if(!message.guild.member(message.author).hasPermission("MANAGE_GUILD")) return m
       } else {
        message.channel.send("Erreur mauvais usage: "+prefix+"clearwarns <utilisateur> <nombre|tout>");
       }
-    } else {
-      message.channel.send("**:x: Vous n'avez pas la permission `manage-guild` dans ce serveur**");
-    }
-  }}
+  }
+}
     module.exports = warn
